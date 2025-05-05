@@ -1,0 +1,56 @@
+#+title: Week 1
+
+* Create a network in python
+
+** Undirected
+#+begin_src python
+import networkx as nx
+G = nx.Graph()
+G.add_edge('A', 'B')
+G.add_edge('B', 'C')
+#+end_src
+
+When you add an edge, if the node doesn't exist, =networkx= will add the node
+
+** Directed
+
+Create an edge pointing from A to B
+#+begin_src python
+  G = nx.DiGraph()
+  G.add_edge('A', 'B')
+#+end_src
+
+** Weighted
+Edges are assigned a weight
+
+#+begin_src python
+  G = nx.Graph()
+  G.add_edge('A', 'B', weight=6)
+#+end_src
+
+** Signed networks
+
+- Carry information about friendship or antagonism
+
+#+begin_src python
+  G = nx.Graph()
+  G.add_edge('A', 'B', sign='+')
+  G.add_edge('A', 'C', sign='-')
+#+end_src
+
+  
+
+** Othere edge attributes
+
+#+begin_src python
+  G = nx.Graph()
+  G.add_edge('A', 'B', relation='friend')
+#+end_src
+
+** Multigraph
+A network where multiple edges can connect the same nodes (parallel edges)
+#+begin_src python
+  G = nx.MultiGraph()
+  G.add_edge('A', 'B', relation='friend')
+  G.add_edge('A', 'B', relation='neighbor')
+#+end_src

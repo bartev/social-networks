@@ -1,0 +1,30 @@
+[project]
+name = "social-networks"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Bartev Vartanian", email = "bartev@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "black>=25.1.0",
+    "ipykernel>=6.29.5",
+    "ipympl>=0.9.7",
+    "isort>=6.0.1",
+    "jupyterlab>=4.4.1",
+    "networkx>=3.4.2",
+    "notebook>=7.4.1",
+    "pyvis>=0.3.2",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.2",
+    "seaborn>=0.13.2",
+    "streamlit>=1.45.0",
+]
+
+[project.scripts]
+social-networks = "social_networks:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
