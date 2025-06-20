@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import networkx as nx
+import social_networks.visualize as viz
 import streamlit as st
 import streamlit.components.v1 as components
 from pyvis.network import Network
@@ -12,10 +13,11 @@ choice_mpl = "Matplotlib"
 choice_pyv = "Interactive (Pyvis)"
 # Sidebar options
 n = st.slider(label="Number of nodes", min_value=5, max_value=30, value=10)
-p = st.slider(label="Probability of edge creation",  min_value=0.1, max_value=1.0, value=0.3)
+p = st.slider(
+    label="Probability of edge creation", min_value=0.1, max_value=1.0, value=0.3
+)
 view_option = st.sidebar.multiselect(
-    label="Choose display format(s):",
-    options=[choice_mpl, choice_pyv]
+    label="Choose display format(s):", options=[choice_mpl, choice_pyv]
 )
 
 # Create a simple graph
@@ -29,7 +31,7 @@ pos = nx.spring_layout(G)
 if set(view_option) == {choice_mpl, choice_pyv}:
     col1, col2 = st.columns(2)
 else:
-    col1 = col2 = st.container() # Use full width if only 1 is selected
+    col1 = col2 = st.container()  # Use full width if only 1 is selected
 
 # Matplotlib graph
 
@@ -38,7 +40,8 @@ if choice_mpl in view_option:
         st.subheader("Matplotlib View")
         fig, ax = plt.subplots()
 
-        nx.draw(G, with_labels=True, ax=ax, node_color="skyblue", edge_color="red", node_size=500)
+        # nx.draw(G, with_labels=True, ax=ax, node_color="skyblue", edge_color="red", node_size=500)
+        fig = viz.draw_pretty_hover(G, scale_by_degree=True, color_by_degree=True)
 
         # Show the plot in Streamlit
         st.pyplot(fig)
