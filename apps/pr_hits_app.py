@@ -10,11 +10,12 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 import social_networks.hits as hits
 import social_networks.page_rank as pg_rnk
 import social_networks.visualize as viz
 import streamlit as st
-from altair.vegalite.v5.schema.core import ScaleInvalidDataShowAsValuestrokeWidth
+
 
 st.title("Network Centrality Visualizer")
 
@@ -153,8 +154,9 @@ def draw_data_table(pr_scores, auth_scores, hub_scores):
     st.dataframe(df)
 
 
-draw_single_data_table(score_name=score_name)
+# draw_single_data_table(score_name=score_name)
 draw_data_table(pr_scores=pr_values, auth_scores=auths, hub_scores=hubs)
+
 
 # Convergence Plot
 
@@ -194,8 +196,40 @@ def draw_convergence(score_name: str):
         ylabel=score_name,
         title=f"{score_name} Over Iterations",
     )
-    ax.legend()
+    # Clean up axes
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.legend(frameon=False)
     st.pyplot(fig)
 
 
+def draw_convergence_plotly(score_name: str):
+    """Draw an interactive convergence plot using Plotly"""
+    st.subheader(f"{score_name} Convergence (Interactive)")
+    fig = go.Figure()
+    nodes = list(G.nodes())
+    for i, node in enumerate(nodes):
+        values = [hist[node] for hist in history_list]
+        fig.add_trace(
+            go.Scatter(
+                x=list(range(len(values))),
+                y=values,
+                mode="lines+markers",
+                name=node,
+                hovertemplate=f"Node: {node}<br>Iteration: %{{x}}<br>{score_name}: %{{y:.3f}}",
+            )
+        )
+    fig.update_layout(
+        xaxis_title="iteration",
+        yaxis_title=score_name,
+        title=f"{score_name} Over Iterations",
+        showlegend=True,
+        height=400,
+        margin=dict(l=20, r=20, t=40, b=20),
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+
 draw_convergence(score_name=score_name)
+
+draw_convergence_plotly(score_name=score_name)
