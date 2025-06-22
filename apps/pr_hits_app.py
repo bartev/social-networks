@@ -20,17 +20,37 @@ import streamlit as st
 st.title("Network Centrality Visualizer")
 
 
-def get_graph(G=None):
+# Add text input to sidebar
+def add_edges():
+    st.sidebar.markdown("### Paste Edges (optional)")
+    default_edges = [("A", "B"), ("A", "C"), ("B", "C"), ("C", "A"), ("D", "C")]
+    default_text = "\n".join(f"{src} {dest}" for src, dest in default_edges)
+    return st.sidebar.text_area(
+        "Enter one edge per line (e.g., 'A B' or 'A,B')", height=150, value=default_text
+    )
+
+
+edge_text = add_edges()
+
+
+def get_graph(edge_text=None):
     """Get a default graph if one is not provided"""
-    if G:
-        return G
+    if edge_text:
+        try:
+            edges = []
+            for line in edge_text.strip().splitlines():
+                parts = [x.strip() for x in line.replace(",", " ").split()]
+                if len(parts) == 2:
+                    edges.append(tuple(parts))
+            if edges:
+                G = nx.DiGraph()
+                G.add_edges_from(edges)
+                return G
+        except Exception as e:
+            st.warning(f"Error parsing pasted edges: {e}")
 
-    # Example graph
-    edges = [("A", "B"), ("A", "C"), ("B", "C"), ("C", "A"), ("D", "C")]
-
-    G = nx.DiGraph()
-    G.add_edges_from(edges)
-    return G
+    # Return an empty graph is something fails
+    return nx.DiGraph()
 
 
 # Sidebar controls
@@ -50,10 +70,10 @@ d = st.sidebar.slider(
 )
 
 # Compute pageRank
-G = get_graph()
+G = get_graph(edge_text=edge_text)
 
 pr_values, pr_hist = pg_rnk.pagerank_steps_with_history(G, k=k, d=d)
-auths, hubs, auth_hist, hub_hist = hits.hits_steps(G=G, k=k, with_history=True)
+auths, hubs, auth_hist, hub_hist = hits.hits_steps(G=G, k=k)
 if algorithm == "PageRank":
     score_name = "PageRank"
     values = pr_values
@@ -208,7 +228,7 @@ def draw_convergence_plotly(score_name: str):
     st.subheader(f"{score_name} Convergence (Interactive)")
     fig = go.Figure()
     nodes = list(G.nodes())
-    for i, node in enumerate(nodes):
+    for node in nodes:
         values = [hist[node] for hist in history_list]
         fig.add_trace(
             go.Scatter(

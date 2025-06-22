@@ -5,9 +5,8 @@ import networkx as nx
 
 
 # Hyperlink-Induced Topic Search
-def hits_steps(G: nx.Graph, k: int = 10, normalize: bool = True):
+def hits_steps(G: nx.DiGraph, k: int = 10, normalize: bool = True):
     nodes = list(G.nodes())
-    num_nodes = len(nodes)
 
     auth = {node: 1.0 for node in nodes}
     hub = {node: 1.0 for node in nodes}
