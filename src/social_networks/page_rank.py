@@ -4,10 +4,10 @@
 import networkx as nx
 
 
-def pagerank_steps(G, k: int = 1, alpha: float = 0.85):
+def pagerank_steps(G, k: int = 1, d: float = 0.85):
     """Calculate the basic page rank after `k` iterations
     k: number of steps to take
-    alpha: damping factor
+    d: damping factor
     """
     num_nodes = G.number_of_nodes()
     if num_nodes == 0:
@@ -26,7 +26,7 @@ def pagerank_steps(G, k: int = 1, alpha: float = 0.85):
                 for neigh in incoming
                 if G.out_degree(neigh) > 0
             )
-            new_pr[node] = (1 - alpha) / num_nodes + alpha * (
+            new_pr[node] = (1 - d) / num_nodes + d * (
                 rank_sum + dangling_sum / num_nodes
             )
 
@@ -35,7 +35,7 @@ def pagerank_steps(G, k: int = 1, alpha: float = 0.85):
     return pr
 
 
-def pagerank_steps_with_history(G, k=1, alpha=0.85):
+def pagerank_steps_with_history(G, k=1, d=0.85):
     N = G.number_of_nodes()
     if N == 0:
         return {}, []
@@ -53,7 +53,7 @@ def pagerank_steps_with_history(G, k=1, alpha=0.85):
                 for neigh in incoming
                 if G.out_degree(neigh) > 0
             )
-            new_pr[node] = (1 - alpha) / N + alpha * (rank_sum + dangling_sum / N)
+            new_pr[node] = (1 - d) / N + d * (rank_sum + dangling_sum / N)
 
         pr = new_pr
         history.append(pr.copy())
