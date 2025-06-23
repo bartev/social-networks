@@ -1,10 +1,25 @@
 # Utility functions for exploring graphs
 
+from pathlib import Path
+
 import networkx as nx
 from networkx import Graph
 from rich.columns import Columns
 from rich.console import Console
 from rich.table import Table
+
+
+def find_git_root(path=None):
+    """
+    Find the root (git) directory
+    Keyword Arguments:
+    path -- (default None)
+    """
+    path = Path(path or Path.cwd()).resolve()
+    for parent in [path] + list(path.parents):
+        if (parent / ".git").is_dir():
+            return parent
+    return None  # Not in a git repo
 
 
 def top_n_by_dict_val(d: dict, k: int) -> list:
