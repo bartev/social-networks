@@ -1,3 +1,6 @@
 * Inbox
 ** [2025-06-16 Mon 00:15]
 Not sure what is wrong with Assignment 2 question 11.
+** emojis
+✅
+❌
