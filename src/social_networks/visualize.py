@@ -15,7 +15,7 @@ def draw_pretty_hover(G: Graph, scale_by_degree=False, color_by_degree=False):
     """
     pos = nx.kamada_kawai_layout(G)
 
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots()
 
     if scale_by_degree:
         node_sizes = [G.degree[n] * 100 for n in G.nodes()]
