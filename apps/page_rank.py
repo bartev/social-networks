@@ -38,7 +38,7 @@ seed = st.sidebar.number_input("Layout seed", min_value=0, value=42, step=1)
 # Compute pageRank
 G = get_graph()
 # pr = pg_rnk.pagerank_steps(G, k=k, alpha=alpha)
-pr, history = pg_rnk.pagerank_steps_with_history(G, k=k, alpha=alpha)
+pr, history = pg_rnk.pagerank_steps_with_history(G, k=k, d=alpha)
 
 # Layout and color setup
 pos = nx.spring_layout(G, seed=seed)
